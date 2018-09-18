@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class ViewController: UIViewController {
     
@@ -24,7 +25,9 @@ class ViewController: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
+        tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         return tf
+        
     }()
     
     let usernameTextField: UITextField = {
@@ -34,6 +37,7 @@ class ViewController: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
+        tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         return tf
     }()
     
@@ -45,8 +49,20 @@ class ViewController: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
+        tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         return tf
     }()
+    
+    @objc func handleTextInputChange() {
+        let isFormValid = emailTextField.text?.characters.count ?? 0 > 0 && passwordTextField.text?.characters.count ?? 0 > 0 && usernameTextField.text?.count ?? 0 > 0
+        if isFormValid {
+            signUpButton.backgroundColor = UIColor.rgb(red: 17,green: 154,blue: 237)
+            signUpButton.isEnabled = true
+        } else {
+            signUpButton.backgroundColor = UIColor.rgb(red: 149,green: 204,blue: 244)
+            signUpButton.isEnabled = false
+        }
+    }
     
     let signUpButton: UIButton = {
          let button = UIButton(type: .system)
@@ -56,11 +72,31 @@ class ViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor.rgb(red: 149,green: 204,blue: 244)
         button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
     
     @objc func handleSignUp() {
+        guard let email = emailTextField.text, email.characters.count > 0 else { return }
+        guard let username = usernameTextField.text, username.characters.count > 0 else { return }
+        guard let password = passwordTextField.text, password.characters.count > 0 else { return }
         
+        Auth.auth().createUser(withEmail: username, password: password) { (userData, error) in
+            if let err = error {
+                print("faild to create user:",err )
+                return
+            }
+            print("Created user successfully:", userData?.user.uid)
+            guard let uid = userData?.user.uid else { return }
+            let values = [uid: 1]
+            Database.database().reference().child("users").setValue(values, withCompletionBlock: { (err, ref) in
+                if let err = err {
+                    print("Faild to save user info to db:",err)
+                    return
+                }
+                print("Succefully saved user info to db:")
+            })
+        }
     }
 
     override func viewDidLoad() {
