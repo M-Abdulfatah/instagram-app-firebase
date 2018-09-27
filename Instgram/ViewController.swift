@@ -9,14 +9,38 @@
 import UIKit
 import Firebase
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     let plusPhotoBtton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
         return button
     }()
+    
+    @objc func handlePlusPhoto() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        
+        
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
+            plusPhotoBtton.setImage(editedImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        } else if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage {
+            plusPhotoBtton.setImage(originalImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+        plusPhotoBtton.layer.cornerRadius = plusPhotoBtton.layer.frame.width/2
+        plusPhotoBtton.layer.masksToBounds = true
+        plusPhotoBtton.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        plusPhotoBtton.layer.borderWidth = 3
+        dismiss(animated: true, completion: nil)
+    }
     
     let emailTextField: UITextField = {
        let tf = UITextField()
@@ -81,21 +105,39 @@ class ViewController: UIViewController {
         guard let username = usernameTextField.text, username.characters.count > 0 else { return }
         guard let password = passwordTextField.text, password.characters.count > 0 else { return }
         
-        Auth.auth().createUser(withEmail: username, password: password) { (userData, error) in
+        Auth.auth().createUser(withEmail: email, password: password) { (userData, error) in
+            
             if let err = error {
                 print("faild to create user:",err )
                 return
             }
-            print("Created user successfully:", userData?.user.uid)
-            guard let uid = userData?.user.uid else { return }
-            let values = [uid: 1]
-            Database.database().reference().child("users").setValue(values, withCompletionBlock: { (err, ref) in
+            
+            print("Created user successfully:", (userData?.user.uid)!)
+            
+            guard let image = self.plusPhotoBtton.imageView?.image else { return }
+            guard let uploadData = UIImageJPEGRepresentation(image, 0.3) else { return }
+            
+            let filename = NSUUID().uuidString
+            Storage().reference().child("profile_images").child(filename).putData(uploadData, metadata: nil, completion: { (metaData, err) in
                 if let err = err {
-                    print("Faild to save user info to db:",err)
+                    print("Failed to upoad profile Image:", err.localizedDescription)
                     return
                 }
-                print("Succefully saved user info to db:")
+                
             })
+//            guard let uid = userData?.user.uid else { return }
+//
+//            let usernameValues = ["username":username]
+//            let values = [uid: usernameValues]
+//
+//            Database.database().reference().child("users").updateChildValues(values, withCompletionBlock: { (err, ref) in
+//                if let err = err {
+//                    print("Faild to save user info to db:",err)
+//                    return
+//                }
+//                print("Succefully saved user info to db")
+//
+//            })
         }
     }
 
