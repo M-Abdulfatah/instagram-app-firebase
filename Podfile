@@ -11,5 +11,9 @@ target 'Instgram' do
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
+  pod 'FacebookCore'
+  pod 'FacebookLogin'
+  pod 'FacebookShare'
+  pod 'SwiftyJSON', '~> 4.0'
 
 end

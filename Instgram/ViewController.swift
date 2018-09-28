@@ -8,8 +8,15 @@
 
 import UIKit
 import Firebase
+import FacebookCore
+import FacebookLogin
+import SwiftyJSON
+
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    var facebookUser = FacebookUserModel()
+    
+    
     
     let plusPhotoBtton: UIButton = {
         let button = UIButton(type: .system)
@@ -43,7 +50,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     let emailTextField: UITextField = {
-       let tf = UITextField()
+        let tf = UITextField()
         tf.placeholder = "Email"
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
@@ -89,7 +96,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     let signUpButton: UIButton = {
-         let button = UIButton(type: .system)
+        let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
@@ -125,22 +132,31 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
                 
             })
-//            guard let uid = userData?.user.uid else { return }
-//
-//            let usernameValues = ["username":username]
-//            let values = [uid: usernameValues]
-//
-//            Database.database().reference().child("users").updateChildValues(values, withCompletionBlock: { (err, ref) in
-//                if let err = err {
-//                    print("Faild to save user info to db:",err)
-//                    return
-//                }
-//                print("Succefully saved user info to db")
-//
-//            })
+            //            guard let uid = userData?.user.uid else { return }
+            //
+            //            let usernameValues = ["username":username]
+            //            let values = [uid: usernameValues]
+            //
+            //            Database.database().reference().child("users").updateChildValues(values, withCompletionBlock: { (err, ref) in
+            //                if let err = err {
+            //                    print("Faild to save user info to db:",err)
+            //                    return
+            //                }
+            //                print("Succefully saved user info to db")
+            //
+            //            })
         }
     }
-
+    
+    func setupFBLoginBtn() {
+        let loginButton = LoginButton(readPermissions: [ .publicProfile, .email])
+        loginButton.delegate = self
+        view.addSubview(loginButton)
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        loginButton.anchor(top: signUpButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 20, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 40)
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -149,8 +165,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         plusPhotoBtton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         setupInputFields()
+        
+        setupFBLoginBtn()
+        
     }
-
+    
     fileprivate func setupInputFields() {
         
         let stackView = UIStackView(arrangedSubviews: [emailTextField, usernameTextField, passwordTextField, signUpButton])
@@ -165,14 +184,66 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                                      stackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -40),
                                      stackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 40),
                                      stackView.heightAnchor.constraint(equalToConstant: 200)])
-
+        
         
         stackView.anchor(top: plusPhotoBtton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 20, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 200)
     }
-
+    
 }
 
-
+extension ViewController: LoginButtonDelegate {
+    
+    func loginButtonDidCompleteLogin(_ loginButton: LoginButton, result: LoginResult) {
+        fetchFBUserData() 
+    }
+    
+    func loginButtonDidLogOut(_ loginButton: LoginButton) {
+        print("Logged Out")
+    }
+    
+    struct MyProfileRequest: GraphRequestProtocol {
+        struct Response: GraphResponseProtocol {
+            var facebookUserData = FacebookUserModel()
+            init(rawResponse: Any?) {
+                // Decode JSON from rawResponse into other properties here.
+                guard (rawResponse as? NSDictionary) != nil else { return }
+//                let json = JSON(rawValue: rawData)
+//                    print(json)
+                do {
+                    let rawdata = try JSONSerialization.data(withJSONObject: rawResponse as Any, options: .sortedKeys)
+                    let userData = try! JSONDecoder().decode(FacebookUserModel.self, from: rawdata)
+                    self.facebookUserData = userData
+                } catch let err {
+                    debugPrint(err.localizedDescription)
+                }
+                
+            }
+            
+        }
+        
+        var graphPath = "/me"
+        var parameters: [String : Any]? = ["fields": "id, name, email, picture, first_name, last_name, middle_name, name_format, short_name"]
+        //        var parameters: [String : Any]? = ["fields": "id, name, email, picture"]
+        var accessToken = AccessToken.current
+        var httpMethod: GraphRequestHTTPMethod = .GET
+        var apiVersion: GraphAPIVersion = .defaultVersion
+    }
+    
+    func fetchFBUserData() {
+        let connection = GraphRequestConnection()
+        connection.add(MyProfileRequest()) { response, result in
+            switch result {
+            case .success(let response):
+                self.facebookUser = response.facebookUserData
+                print("This is the user Email:",self.facebookUser.email)
+            case .failed(let error):
+                print("Custom Graph Request Failed: \(error)")
+            }
+        }
+        connection.start()
+    }
+    
+}
 
 
 
