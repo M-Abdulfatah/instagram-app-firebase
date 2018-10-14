@@ -17,7 +17,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var facebookUser = FacebookUserModel()
     
     
-    
+    var fileName = String()
     let plusPhotoBtton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
@@ -46,6 +46,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         plusPhotoBtton.layer.masksToBounds = true
         plusPhotoBtton.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         plusPhotoBtton.layer.borderWidth = 3
+        let fileurl = info["UIImagePickerControllerImageURL"] as! URL
+        fileName = fileurl.description
         dismiss(animated: true, completion: nil)
     }
     
@@ -108,6 +110,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }()
     
     @objc func handleSignUp() {
+        var profileImageUrl = ""
         guard let email = emailTextField.text, email.characters.count > 0 else { return }
         guard let username = usernameTextField.text, username.characters.count > 0 else { return }
         guard let password = passwordTextField.text, password.characters.count > 0 else { return }
@@ -115,7 +118,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         Auth.auth().createUser(withEmail: email, password: password) { (userData, error) in
             
             if let err = error {
-                print("faild to create user:",err )
+                print("faild to create user:",err.localizedDescription )
                 return
             }
             
@@ -125,37 +128,44 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             guard let uploadData = UIImageJPEGRepresentation(image, 0.3) else { return }
             
             let filename = NSUUID().uuidString
-            Storage().reference().child("profile_images").child(filename).putData(uploadData, metadata: nil, completion: { (metaData, err) in
+            let storageRef = Storage.storage().reference().child("profile_images").child(filename)
+            
+            storageRef.putData(uploadData, metadata: nil, completion: { (metaData, err) in
                 if let err = err {
-                    print("Failed to upoad profile Image:", err.localizedDescription)
+                    print("Failed to upload profile Image: ", err.localizedDescription)
                     return
                 }
                 
+                storageRef.downloadURL(completion: { (url, err) in
+                    guard let downloadurl = url else { return }
+                     profileImageUrl = downloadurl.absoluteString
+                    print("downloadURL", downloadurl)
+                    print("DownloadAbsolute", downloadurl.absoluteString)
+                    
+                    print("Successfully uploaded profile Image: ", profileImageUrl)
+                    
+                    guard let uid = userData?.user.uid else { return }
+                    
+                    let usernameValues = ["username":username, "profileImageUrl": profileImageUrl]
+                    let values = [uid: usernameValues]
+                    
+                    Database.database().reference().child("users").updateChildValues(values, withCompletionBlock: { (err, ref) in
+                        if let err = err {
+                            print("Faild to save user info to db:",err)
+                            return
+                        }
+                        print("Succefully saved user info to db")
+                        
+                    })
+                })
+                
+               
             })
-            //            guard let uid = userData?.user.uid else { return }
-            //
-            //            let usernameValues = ["username":username]
-            //            let values = [uid: usernameValues]
-            //
-            //            Database.database().reference().child("users").updateChildValues(values, withCompletionBlock: { (err, ref) in
-            //                if let err = err {
-            //                    print("Faild to save user info to db:",err)
-            //                    return
-            //                }
-            //                print("Succefully saved user info to db")
-            //
-            //            })
+            
         }
     }
     
-    func setupFBLoginBtn() {
-        let loginButton = LoginButton(readPermissions: [ .publicProfile, .email])
-        loginButton.delegate = self
-        view.addSubview(loginButton)
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.anchor(top: signUpButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 20, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 40)
-        
-    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -191,7 +201,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
 }
 
+// This is where I handle Login with Facebook
 extension ViewController: LoginButtonDelegate {
+    
+    func setupFBLoginBtn() {
+        let loginButton = LoginButton(readPermissions: [ .publicProfile, .email])
+        loginButton.delegate = self
+        view.addSubview(loginButton)
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        loginButton.anchor(top: signUpButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 20, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 40)
+        
+    }
     
     func loginButtonDidCompleteLogin(_ loginButton: LoginButton, result: LoginResult) {
         fetchFBUserData() 
@@ -201,33 +221,7 @@ extension ViewController: LoginButtonDelegate {
         print("Logged Out")
     }
     
-    struct MyProfileRequest: GraphRequestProtocol {
-        struct Response: GraphResponseProtocol {
-            var facebookUserData = FacebookUserModel()
-            init(rawResponse: Any?) {
-                // Decode JSON from rawResponse into other properties here.
-                guard (rawResponse as? NSDictionary) != nil else { return }
-//                let json = JSON(rawValue: rawData)
-//                    print(json)
-                do {
-                    let rawdata = try JSONSerialization.data(withJSONObject: rawResponse as Any, options: .sortedKeys)
-                    let userData = try! JSONDecoder().decode(FacebookUserModel.self, from: rawdata)
-                    self.facebookUserData = userData
-                } catch let err {
-                    debugPrint(err.localizedDescription)
-                }
-                
-            }
-            
-        }
-        
-        var graphPath = "/me"
-        var parameters: [String : Any]? = ["fields": "id, name, email, picture, first_name, last_name, middle_name, name_format, short_name"]
-        //        var parameters: [String : Any]? = ["fields": "id, name, email, picture"]
-        var accessToken = AccessToken.current
-        var httpMethod: GraphRequestHTTPMethod = .GET
-        var apiVersion: GraphAPIVersion = .defaultVersion
-    }
+    
     
     func fetchFBUserData() {
         let connection = GraphRequestConnection()

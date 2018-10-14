@@ -21,6 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         FirebaseApp.configure()
+        
+        window = UIWindow()
+        window?.rootViewController = MainTabBarController()
         return true
     }
     
