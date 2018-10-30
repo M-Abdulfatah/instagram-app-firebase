@@ -9,11 +9,12 @@
 /* Begin PBXBuildFile section */
 		1E0635C1215E93A400AD92B2 /* FacebookUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0635C0215E93A400AD92B2 /* FacebookUserModel.swift */; };
 		1E0635C4215EBDED00AD92B2 /* MyProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0635C3215EBDED00AD92B2 /* MyProfileRequest.swift */; };
+		1E21AB352184FB9D0091EA67 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E21AB342184FB9D0091EA67 /* LoginController.swift */; };
 		1E6AC3812170DC9A00334DDD /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6AC3802170DC9A00334DDD /* MainTabBarController.swift */; };
 		1E6AC3832170DF4400334DDD /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6AC3822170DF4400334DDD /* UserProfileController.swift */; };
 		1EAF142421713E85009221B5 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EAF142321713E85009221B5 /* UserProfileHeader.swift */; };
 		1EC90F062144AB8A0060FCFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC90F052144AB8A0060FCFB /* AppDelegate.swift */; };
-		1EC90F082144AB8A0060FCFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC90F072144AB8A0060FCFB /* ViewController.swift */; };
+		1EC90F082144AB8A0060FCFB /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC90F072144AB8A0060FCFB /* SignUpController.swift */; };
 		1EC90F0B2144AB8A0060FCFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EC90F092144AB8A0060FCFB /* Main.storyboard */; };
 		1EC90F0D2144AB8C0060FCFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EC90F0C2144AB8C0060FCFB /* Assets.xcassets */; };
 		1EC90F102144AB8C0060FCFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EC90F0E2144AB8C0060FCFB /* LaunchScreen.storyboard */; };
@@ -26,12 +27,13 @@
 		1E0635BB215E535E00AD92B2 /* Instgram.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Instgram.entitlements; sourceTree = "<group>"; };
 		1E0635C0215E93A400AD92B2 /* FacebookUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookUserModel.swift; sourceTree = "<group>"; };
 		1E0635C3215EBDED00AD92B2 /* MyProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileRequest.swift; sourceTree = "<group>"; };
+		1E21AB342184FB9D0091EA67 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		1E6AC3802170DC9A00334DDD /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		1E6AC3822170DF4400334DDD /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		1EAF142321713E85009221B5 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		1EC90F022144AB8A0060FCFB /* Instgram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Instgram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EC90F052144AB8A0060FCFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1EC90F072144AB8A0060FCFB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1EC90F072144AB8A0060FCFB /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		1EC90F0A2144AB8A0060FCFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1EC90F0C2144AB8C0060FCFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1EC90F0F2144AB8C0060FCFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -71,6 +73,15 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		1E21AB332184FB750091EA67 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				1E21AB342184FB9D0091EA67 /* LoginController.swift */,
+				1EC90F072144AB8A0060FCFB /* SignUpController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
 		1EAF142221713E64009221B5 /* UserProfile */ = {
 			isa = PBXGroup;
 			children = (
@@ -101,13 +112,13 @@
 		1EC90F042144AB8A0060FCFB /* Instgram */ = {
 			isa = PBXGroup;
 			children = (
+				1E21AB332184FB750091EA67 /* Login */,
 				1EAF142221713E64009221B5 /* UserProfile */,
 				1E0635C2215EBDBF00AD92B2 /* Services */,
 				1E0635BF215E938500AD92B2 /* Model */,
 				1EC90F172144C6030060FCFB /* Utils */,
 				1EC90F052144AB8A0060FCFB /* AppDelegate.swift */,
 				1E6AC3802170DC9A00334DDD /* MainTabBarController.swift */,
-				1EC90F072144AB8A0060FCFB /* ViewController.swift */,
 				1EC90F092144AB8A0060FCFB /* Main.storyboard */,
 				1EC90F0C2144AB8C0060FCFB /* Assets.xcassets */,
 				1EC90F0E2144AB8C0060FCFB /* LaunchScreen.storyboard */,
@@ -292,9 +303,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E0635C1215E93A400AD92B2 /* FacebookUserModel.swift in Sources */,
-				1EC90F082144AB8A0060FCFB /* ViewController.swift in Sources */,
+				1EC90F082144AB8A0060FCFB /* SignUpController.swift in Sources */,
 				1E0635C4215EBDED00AD92B2 /* MyProfileRequest.swift in Sources */,
 				1EAF142421713E85009221B5 /* UserProfileHeader.swift in Sources */,
+				1E21AB352184FB9D0091EA67 /* LoginController.swift in Sources */,
 				1EC90F192144C61F0060FCFB /* Extensions.swift in Sources */,
 				1E6AC3832170DF4400334DDD /* UserProfileController.swift in Sources */,
 				1EC90F062144AB8A0060FCFB /* AppDelegate.swift in Sources */,

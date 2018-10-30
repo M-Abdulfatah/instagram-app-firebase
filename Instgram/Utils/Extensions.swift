@@ -16,9 +16,21 @@ extension UIColor {
 
 extension UIView {
     
-    // this function is used to anchor any uiview from its four size
-    // if you don`t want to use any side just enter it by nil value
-    // if you don`t want to enter specific height or width just enter it by 0 value
+    /// this function is used to anchor any uiview from its four sides
+    /// if you don`t want to use any side just enter it by nil value
+    /// if you don`t want to enter specific height or width just enter it by 0 value
+    ///
+    /// - Parameters:
+    ///   - top: NSLayoutConstraint to ancor TheView From Top
+    ///   - left: NSLayoutConstraint to ancor TheView From left
+    ///   - bottom: NSLayoutConstraint to ancor TheView From bottom
+    ///   - right: NSLayoutConstraint to ancor TheView From right
+    ///   - paddingTop: space between (the view Top side) and parameter: top
+    ///   - paddingLeft: space between (the view Left side) and parameter: left
+    ///   - paddingBottom: space between (the view Bottom side) and parameter: bottom
+    ///   - paddingRight: space between (the view Right side) and parameter: right
+    ///   - width: the View Width if needed
+    ///   - height: the view Height if needed
     func anchor(top: NSLayoutYAxisAnchor?, left: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, right: NSLayoutXAxisAnchor?, paddingTop: CGFloat, paddingLeft: CGFloat, paddingBottom: CGFloat, paddingRight: CGFloat, width: CGFloat, height: CGFloat) {
         
         self.translatesAutoresizingMaskIntoConstraints = false

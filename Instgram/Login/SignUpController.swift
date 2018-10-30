@@ -13,7 +13,7 @@ import FacebookLogin
 import SwiftyJSON
 
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class SignUpController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var facebookUser = FacebookUserModel()
     
     
@@ -87,7 +87,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }()
     
     @objc func handleTextInputChange() {
-        let isFormValid = emailTextField.text?.characters.count ?? 0 > 0 && passwordTextField.text?.characters.count ?? 0 > 0 && usernameTextField.text?.count ?? 0 > 0
+        let isFormValid = emailTextField.text?.count ?? 0 > 0 && passwordTextField.text?.count ?? 0 > 0 && usernameTextField.text?.count ?? 0 > 0
         if isFormValid {
             signUpButton.backgroundColor = UIColor.rgb(red: 17,green: 154,blue: 237)
             signUpButton.isEnabled = true
@@ -111,9 +111,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @objc func handleSignUp() {
         var profileImageUrl = ""
-        guard let email = emailTextField.text, email.characters.count > 0 else { return }
-        guard let username = usernameTextField.text, username.characters.count > 0 else { return }
-        guard let password = passwordTextField.text, password.characters.count > 0 else { return }
+        guard let email = emailTextField.text, email.count > 0 else { return }
+        guard let username = usernameTextField.text, username.count > 0 else { return }
+        guard let password = passwordTextField.text, password.count > 0 else { return }
         
         Auth.auth().createUser(withEmail: email, password: password) { (userData, error) in
             
@@ -156,6 +156,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         }
                         print("Succefully saved user info to db")
                         
+                        guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
+                        mainTabBarController.setupViewControllers()
+                        
+                        self.dismiss(animated: true, completion: nil)
+                        
                     })
                 })
                 
@@ -165,10 +170,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
+    let alreadyHaveAccountButton: UIButton = {
+        let button = UIButton(type: .system)
+        
+        let attributedtitle = NSMutableAttributedString(string: "Already have an account?  ", attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14), NSAttributedStringKey.foregroundColor: UIColor.lightGray])
+        attributedtitle.append(NSAttributedString(string: "Sign In", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14),NSAttributedStringKey.foregroundColor: UIColor.rgb(red: 17, green: 154, blue: 237)]))
+        button.setAttributedTitle(attributedtitle, for: .normal)
+        
+        button.addTarget(self, action: #selector(handleAlredyHaveAccount), for: .touchUpInside)
+        return button
+    }()
     
+    @objc func handleAlredyHaveAccount() {
+        navigationController?.popViewController(animated: true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
+        
+        view.addSubview(alreadyHaveAccountButton)
+        alreadyHaveAccountButton.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
         
         view.addSubview(plusPhotoBtton)
         plusPhotoBtton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 40, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 140, height: 140)
@@ -202,7 +224,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 }
 
 // This is where I handle Login with Facebook
-extension ViewController: LoginButtonDelegate {
+extension SignUpController: LoginButtonDelegate {
     
     func setupFBLoginBtn() {
         let loginButton = LoginButton(readPermissions: [ .publicProfile, .email])
