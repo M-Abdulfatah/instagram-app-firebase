@@ -20,6 +20,8 @@
 		1EC90F102144AB8C0060FCFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EC90F0E2144AB8C0060FCFB /* LaunchScreen.storyboard */; };
 		1EC90F192144C61F0060FCFB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EC90F182144C61F0060FCFB /* Extensions.swift */; };
 		1EC90F1B2144DA110060FCFB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1EC90F1A2144DA110060FCFB /* GoogleService-Info.plist */; };
+		1EE199D521891C9000167095 /* PhotoSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE199D421891C9000167095 /* PhotoSelectorController.swift */; };
+		1EE199D7218938D100167095 /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE199D6218938D100167095 /* PhotoSelectorCell.swift */; };
 		BCFFEAE27A8AB344318C493D /* Pods_Instgram.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 684ABA74A7BFC798E96824B9 /* Pods_Instgram.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +42,8 @@
 		1EC90F112144AB8C0060FCFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EC90F182144C61F0060FCFB /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		1EC90F1A2144DA110060FCFB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1EE199D421891C9000167095 /* PhotoSelectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorController.swift; sourceTree = "<group>"; };
+		1EE199D6218938D100167095 /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
 		684ABA74A7BFC798E96824B9 /* Pods_Instgram.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Instgram.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		80C6665B735F6D01888E5E84 /* Pods-Instgram.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instgram.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Instgram/Pods-Instgram.debug.xcconfig"; sourceTree = "<group>"; };
 		EF082FB074FB71A3BB17EB76 /* Pods-Instgram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instgram.release.xcconfig"; path = "Pods/Target Support Files/Pods-Instgram/Pods-Instgram.release.xcconfig"; sourceTree = "<group>"; };
@@ -112,6 +116,7 @@
 		1EC90F042144AB8A0060FCFB /* Instgram */ = {
 			isa = PBXGroup;
 			children = (
+				1EE199D321891C6B00167095 /* AddPhoto */,
 				1E21AB332184FB750091EA67 /* Login */,
 				1EAF142221713E64009221B5 /* UserProfile */,
 				1E0635C2215EBDBF00AD92B2 /* Services */,
@@ -135,6 +140,15 @@
 				1EC90F182144C61F0060FCFB /* Extensions.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		1EE199D321891C6B00167095 /* AddPhoto */ = {
+			isa = PBXGroup;
+			children = (
+				1EE199D421891C9000167095 /* PhotoSelectorController.swift */,
+				1EE199D6218938D100167095 /* PhotoSelectorCell.swift */,
+			);
+			path = AddPhoto;
 			sourceTree = "<group>";
 		};
 		45824FFDBC1DE5B8CB6CA5B4 /* Pods */ = {
@@ -302,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EE199D7218938D100167095 /* PhotoSelectorCell.swift in Sources */,
 				1E0635C1215E93A400AD92B2 /* FacebookUserModel.swift in Sources */,
 				1EC90F082144AB8A0060FCFB /* SignUpController.swift in Sources */,
 				1E0635C4215EBDED00AD92B2 /* MyProfileRequest.swift in Sources */,
@@ -311,6 +326,7 @@
 				1E6AC3832170DF4400334DDD /* UserProfileController.swift in Sources */,
 				1EC90F062144AB8A0060FCFB /* AppDelegate.swift in Sources */,
 				1E6AC3812170DC9A00334DDD /* MainTabBarController.swift in Sources */,
+				1EE199D521891C9000167095 /* PhotoSelectorController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
