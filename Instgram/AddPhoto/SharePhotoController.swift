@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SharePhotoController: UIViewController {
     
@@ -53,7 +54,42 @@ class SharePhotoController: UIViewController {
     }
     
     @objc func handleShare() {
-        print("Sharing Photo")
+        guard let image = selectedImage else { return }
+        
+        guard let uploadData = UIImageJPEGRepresentation(image, 0.5) else { return }
+        
+        
+        let filename = NSUUID().uuidString
+        let storageRef = Storage.storage().reference().child("posts").child(filename)
+        storageRef.putData(uploadData, metadata: nil) { (metaData, err) in
+            if let err = err {
+                print("Faild to upload Image", err.localizedDescription)
+                return
+            }
+            
+            storageRef.downloadURL(completion: { (url, err) in
+                guard let downloadURL = url else { return }
+                let imageUrl = downloadURL.absoluteString
+                
+                self.saveToDataBaseWithImageUrl(imageUrl: imageUrl)
+            })
+        }
+    }
+    
+    fileprivate func saveToDataBaseWithImageUrl(imageUrl: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let userPostRef = Database.database().reference().child("posts").child(uid)
+        let ref = userPostRef.childByAutoId()
+        
+        let values = ["imageUrl": imageUrl]
+        ref.updateChildValues(values) { (err, ref) in
+            if let err = err {
+                print("Failed to save posts to DB", err.localizedDescription)
+                return
+            }
+            print("Successfully saved posts to DB")
+        }
     }
     
     override var prefersStatusBarHidden: Bool {
