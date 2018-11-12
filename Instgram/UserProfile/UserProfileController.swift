@@ -65,7 +65,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
             
             dictionaries.forEach({ (key, value) in
-                //                print(key, "\n", value)
                 guard let dictionary = value as? [String: Any] else { return }
                 
                 let post = Post(dictionary: dictionary)
