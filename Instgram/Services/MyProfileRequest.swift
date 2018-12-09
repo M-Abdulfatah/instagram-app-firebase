@@ -15,8 +15,6 @@ struct MyProfileRequest: GraphRequestProtocol {
         init(rawResponse: Any?) {
             // Decode JSON from rawResponse into other properties here.
             guard (rawResponse as? NSDictionary) != nil else { return }
-            //                let json = JSON(rawValue: rawData)
-            //                    print(json)
             do {
                 let rawdata = try JSONSerialization.data(withJSONObject: rawResponse as Any, options: .sortedKeys)
                 let userData = try! JSONDecoder().decode(FacebookUserModel.self, from: rawdata)

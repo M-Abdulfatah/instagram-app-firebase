@@ -36,7 +36,13 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     fileprivate func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let ref = Database.database().reference().child("posts").child(uid)
+        Database.fetchUserWithID(uid: uid) { (user) in
+            self.fetchPostsForUser(user: user)
+        }
+    }
+    
+    fileprivate func fetchPostsForUser(user: User) {
+        let ref = Database.database().reference().child("posts").child(user.uid)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
@@ -44,7 +50,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             dictionaries.forEach({ (key, value) in
                 guard let dictionary = value as? [String: Any] else { return }
                 
-                let post = Post(dictionary: dictionary)
+                let post = Post(user: user, dictionary: dictionary)
                 self.posts.append(post)
             })
             
@@ -54,7 +60,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             print("Faild to fetch posts: ", err.localizedDescription)
         }
     }
-    
     func setupNavigationItems() {
         navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo2"))
     }
