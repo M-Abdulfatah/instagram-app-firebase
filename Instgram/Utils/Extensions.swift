@@ -60,3 +60,39 @@ extension UIView {
         }
     }
 }
+
+extension Date {
+  func timeAgoDisplay() -> String {
+    let secondsAgo = Int(Date().timeIntervalSince(self))
+
+    let minute = 60
+    let hour = 60 * minute
+    let day = 24 * hour
+    let week = 7 * day
+    let month = 4 * week
+
+    let quetient: Int
+    let unit: String
+    if secondsAgo < minute {
+      quetient = secondsAgo
+      unit = "second"
+    } else if secondsAgo < hour {
+      quetient = secondsAgo / minute
+      unit = "min"
+    } else if secondsAgo < day {
+      quetient = secondsAgo / hour
+      unit = "hour"
+    } else if secondsAgo < week {
+      quetient = secondsAgo / day
+      unit = "day"
+    } else if secondsAgo < month {
+      quetient = secondsAgo / week
+      unit = "week"
+    } else {
+      quetient = secondsAgo / month
+      unit = "month"
+    }
+
+    return "\(quetient) \(unit)\(quetient == 1 ? "" : "s") ago"
+  }
+}
