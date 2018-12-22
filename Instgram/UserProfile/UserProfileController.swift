@@ -33,7 +33,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         setupLogOutButton()
 
-//        fetchOrderedPosts()
     }
     
     var posts = [Post]()
@@ -61,6 +60,11 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     @objc func handleLogOut() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        if let view = navigationItem.rightBarButtonItem?.value(forKey: "view") as? UIView {
+          alertController.popoverPresentationController?.sourceRect = view.frame
+          alertController.popoverPresentationController?.sourceView = view
+        }
         alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
             do {
                 try Auth.auth().signOut()

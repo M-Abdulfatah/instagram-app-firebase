@@ -25,6 +25,7 @@
 		1EE199D7218938D100167095 /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE199D6218938D100167095 /* PhotoSelectorCell.swift */; };
 		6324A641219A3A6E009A8575 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6324A640219A3A6E009A8575 /* User.swift */; };
 		6324A643219A4B27009A8575 /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6324A642219A4B27009A8575 /* FirebaseUtils.swift */; };
+		63652C5721C65A6400CCC93C /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63652C5621C65A6400CCC93C /* CameraController.swift */; };
 		63A74B81219424E900F38A16 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A74B80219424E900F38A16 /* HomeController.swift */; };
 		63D71B3121947A210075E114 /* HomePostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D71B3021947A210075E114 /* HomePostCell.swift */; };
 		63E0FDDE219AB17C000D6983 /* UserSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E0FDDD219AB17C000D6983 /* UserSearchController.swift */; };
@@ -57,6 +58,7 @@
 		1EE199D6218938D100167095 /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
 		6324A640219A3A6E009A8575 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		6324A642219A4B27009A8575 /* FirebaseUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
+		63652C5621C65A6400CCC93C /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		63A74B80219424E900F38A16 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		63D71B3021947A210075E114 /* HomePostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostCell.swift; sourceTree = "<group>"; };
 		63E0FDDD219AB17C000D6983 /* UserSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchController.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 		1EC90F042144AB8A0060FCFB /* Instgram */ = {
 			isa = PBXGroup;
 			children = (
+				63652C5521C65A3700CCC93C /* Camera */,
 				63E0FDDC219AB150000D6983 /* Search */,
 				63A74B7F219424D100F38A16 /* Home */,
 				1EE199D321891C6B00167095 /* AddPhoto */,
@@ -186,6 +189,14 @@
 				EF082FB074FB71A3BB17EB76 /* Pods-Instgram.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		63652C5521C65A3700CCC93C /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				63652C5621C65A6400CCC93C /* CameraController.swift */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 		63A74B7F219424D100F38A16 /* Home */ = {
@@ -251,6 +262,9 @@
 						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.Keychain = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 						};
@@ -369,6 +383,7 @@
 				1EC90F082144AB8A0060FCFB /* SignUpController.swift in Sources */,
 				1E0635C4215EBDED00AD92B2 /* MyProfileRequest.swift in Sources */,
 				6324A643219A4B27009A8575 /* FirebaseUtils.swift in Sources */,
+				63652C5721C65A6400CCC93C /* CameraController.swift in Sources */,
 				63F3902C21932C5600C780ED /* CustomImageView.swift in Sources */,
 				63F390282192F99E00C780ED /* Post.swift in Sources */,
 				1EAF142421713E85009221B5 /* UserProfileHeader.swift in Sources */,
@@ -530,13 +545,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Instgram/Instgram.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = J58H58LN5G;
+				DEVELOPMENT_TEAM = YD9N344B55;
 				INFOPLIST_FILE = Instgram/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.casio.Instgram;
+				PRODUCT_BUNDLE_IDENTIFIER = com.casio.InstgramFireBase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -550,13 +565,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Instgram/Instgram.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = J58H58LN5G;
+				DEVELOPMENT_TEAM = YD9N344B55;
 				INFOPLIST_FILE = Instgram/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.casio.Instgram;
+				PRODUCT_BUNDLE_IDENTIFIER = com.casio.InstgramFireBase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
